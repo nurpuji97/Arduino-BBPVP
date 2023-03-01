@@ -1,38 +1,35 @@
-#define pin1 2
-#define pin2 3
-      #define delayMinute 1000
-      
-      int number = 0;
+int pin1 = 2; deklarasi pin1
+int pin2 = 3; deklarasi pin1
+int delayMinute = 1000;
 
 void setup() {
   // put your setup code here, to run once:
-  pinMode(pin1, OUTPUT);
-  pinMode(pin2, OUTPUT);
-  Serial.begin(9600);
-
+  pinMode(pin1, OUTPUT); //panggil function pinMode dengan parameter (port_pin, OUTPUT/INPUT)  
+  pinMode(pin2, OUTPUT); //panggil function pinMode dengan parameter (port_pin, OUTPUT/INPUT) 
+  Serial.begin(9600); //deklarasi console log versi arduino
 
   while(1){
-        for(int i = 0; i <= 3; i++){
-          digitalWrite(pin1, HIGH);
-          digitalWrite(pin2, HIGH);
+        for(int i = 0; i <= 3; i++){ //pengulangan dari 0 ke 3
+          digitalWrite(pin1, HIGH); //lampu led menyala port 2  
+          digitalWrite(pin2, HIGH); //lampu led menyala port 3
           delay(100);
-          digitalWrite(pin2, LOW);
-          digitalWrite(pin1, LOW);
+          digitalWrite(pin2, LOW); //lampu led mati port 2 
+          digitalWrite(pin1, LOW); //lampu led mati port 3 
           delay(100);
-//            Serial.print(i);
+//            Serial.print(i); // console log pada arduino
         }
 
-          digitalWrite(pin2, LOW);
-          digitalWrite(pin1, LOW);
-          delay(600);
+          digitalWrite(pin2, LOW); //lampu led mati port 3 
+          digitalWrite(pin1, LOW); //lampu led mati port 2 
+          delay(600); //delay dengan waktu 6 detik
 
-        for(int i = 3; i >= 2; i--){
-          digitalWrite(pin1, HIGH);
-          digitalWrite(pin2, HIGH);
-          delay(delayMinute);
-          digitalWrite(pin2, LOW);
-          digitalWrite(pin1, LOW);
-          delay(delayMinute);
+        for(int i = 3; i >= 2; i--){  //pengulangan dari 3 ke 0
+          digitalWrite(pin1, HIGH); //lampu led menyala port 2 
+          digitalWrite(pin2, HIGH); //lampu led menyala port 3
+          delay(delayMinute); //delay dengan variable yang bernilai 1 menit
+          digitalWrite(pin2, LOW); //lampu led mati port 3
+          digitalWrite(pin1, LOW); //lampu led mati port 2
+          delay(delayMinute); //delay dengan variable yang bernilai 1 menit
         }        
     }
 
