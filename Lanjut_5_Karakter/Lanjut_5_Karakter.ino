@@ -36,16 +36,29 @@ byte piala[] = {
 };
 
 void setup() {
+
+  lcd.begin(16, 2);  
+  
   lcd.createChar(0, smiley);
   lcd.createChar(1, tas);
   lcd.createChar(2, piala);
-  lcd.begin(16, 2);  
-  lcd.write(byte(0));
-  lcd.write(byte(1));
-  lcd.write(byte(2));
 
-  lcd.setCursor(0, 1);
-  lcd.print("test");
 }
 
-void loop() {}
+void loop() {
+
+  lcd.setCursor(0, 0);
+  lcd.write(byte(0));
+  delay(5000);
+
+  lcd.setCursor(2, 0);
+  lcd.write(byte(1));
+   delay(5000);
+
+  lcd.setCursor(0, 1);
+  lcd.write(byte(2));
+   delay(5000);
+
+  // lcd.setCursor(0, 1);
+  // lcd.print("test");
+}
