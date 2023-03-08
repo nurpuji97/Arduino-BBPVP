@@ -11,11 +11,13 @@ void setup() {
 uint8_t Welcome(String terserah){
   String test = terserah;
 
-    for(int i = 0; i<test.length(); i++){
-    lcd.setCursor(i,0);
-    lcd.print(test[i]);
-    delay(1000);
+  for(int i = 0; i<test.length(); i++){
+  lcd.setCursor(i,0);
+  lcd.print(test[i]);
+  delay(1000);   
   }
+  
+  lcd.clear(); 
   
 }
 
