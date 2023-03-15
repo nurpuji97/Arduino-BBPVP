@@ -194,6 +194,6 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  TampilkanSegment(2345);
+  TampilkanSegment(analogRead(A0));
 
 }
