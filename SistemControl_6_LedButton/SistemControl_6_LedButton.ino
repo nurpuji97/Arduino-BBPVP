@@ -2,9 +2,10 @@
 #define btn1 3
 #define btn2 4
 #define btn3 5
-// bool val1;
+bool val1;
 bool val2;
 bool val3;
+bool ledPrev;
 
 void setup() {
   // put your setup code here, to run once:
@@ -16,8 +17,6 @@ void setup() {
   pinMode(btn1, INPUT);
   pinMode(btn2, INPUT);
   pinMode(btn3, INPUT_PULLUP);
-
-Serial.begin(9600);
 }
 
 void loop() {
@@ -31,14 +30,10 @@ void loop() {
   }
 
   if(digitalRead(btn3) == HIGH && val3 == 1){
-      digitalWrite(led, HIGH);
+      ledPrev=~ledPrev;
+      digitalWrite(led, ledPrev);
+      val2 = 0;
+      val3 = 0;
   }
 
-  // if(val1 == 1 && val2 == 2 && val3 == 3){
-  //   digitalWrite(led, HIGH);
-  // } else {
-  //   digitalWrite(led, LOW);
-  // } 
-
-  // Serial.print(digitalRead(btn2));
 }
