@@ -2,9 +2,8 @@
 #define btn1 3
 #define btn2 4
 #define btn3 5
-bool val1;
-bool val2;
-bool val3;
+
+int kondisi;
 bool ledPrev;
 
 void setup() {
@@ -21,19 +20,18 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:  
-  if(digitalRead(btn1) == LOW && val1 == 0){
-      val2 = 1;
+  if(digitalRead(btn1) == LOW && kondisi == 0){
+      kondisi = 1;
   }
 
-  if(digitalRead(btn2) == LOW && val2 == 1){
-      val3 = 1;
+  if(digitalRead(btn2) == LOW && kondisi == 1){
+      kondisi = 2;
   }
 
-  if(digitalRead(btn3) == HIGH && val3 == 1){
-      ledPrev=~ledPrev;
+  if(digitalRead(btn3) == HIGH && kondisi == 2){
+      ledPrev=!ledPrev;
       digitalWrite(led, ledPrev);
-      val2 = 0;
-      val3 = 0;
+      kondisi = 0;
   }
 
 }
