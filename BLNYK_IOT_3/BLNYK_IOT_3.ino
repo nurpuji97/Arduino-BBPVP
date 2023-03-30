@@ -21,7 +21,10 @@ Servo myservo;  // create servo object to control a servo
 BlynkTimer timer;
 
 #define pinServo D1
+int nilai10 = 10;
+int nilai20 = 20;
 int counter;
+bool swicth;
 
 BLYNK_CONNECTED(){
   Blynk.syncAll();  
@@ -31,18 +34,37 @@ BLYNK_WRITE(V0){
   int increment = param.asInt();
   if(increment == 1){
     if(counter <= 180){
-      myservo.write(counter+=10); 
-    }         
+      if(swicth == 0){
+        myservo.write(counter+=nilai10); 
+      } else {
+        myservo.write(counter+=nilai20);         
+      }
+    }      
   }
+  if(counter >= 180) {
+    counter = 180;
+  }   
 }
 
 BLYNK_WRITE(V1){
   int decrement = param.asInt();
   if(decrement == 1){
     if(counter >= 0){
-      myservo.write(counter-=10);
-    }     
+      if(swicth == 0){
+        myservo.write(counter-=nilai10); 
+      } else {
+        myservo.write(counter-=nilai20); 
+      }
+    }      
   }
+  if(counter <= 0) {
+    counter = 0;
+  }  
+}
+
+BLYNK_WRITE(V4){
+  int kelipatan = param.asInt();
+  swicth = kelipatan;
 }
 
 // This function sends Arduino's up time every second to Virtual Pin (5)
@@ -70,4 +92,3 @@ void loop()
   Blynk.run();
   timer.run();
 }
-
