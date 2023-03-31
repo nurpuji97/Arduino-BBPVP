@@ -15,7 +15,7 @@
 char ssid[] = "ayen";
 char pass[] = "ayen1234";
 
-BlynkTimer timer;
+// BlynkTimer timer;
 
 BLYNK_CONNECTED(){
   Blynk.syncAll();  
@@ -44,15 +44,23 @@ void tampilAngka(int angka){
 
 BLYNK_WRITE(V0){
   int increment = param.asInt();
-  if(increment == 1 && counter < 9){
+  if(increment == 1 && counter <= 9){
     tampilAngka(counter++);   
   }
+  if(counter >= 9){
+    counter = 9;
+    // kirim notofikasi
+    Blynk.logEvent("parkir", String("Parkir Penuh....  Jumlah Parkir: ") + counter);
+  }  
 }
 
 BLYNK_WRITE(V1){
   int decrement = param.asInt();
-  if(decrement == 1 && counter > 0){
+  if(decrement == 1 && counter >= 0){
       tampilAngka(counter--);   
+  }
+  if(counter <= 0){
+    counter = 0;
   }
 }
 
@@ -70,7 +78,7 @@ void setup() {
   Serial.begin(9600);
 
   Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
-  timer.setInterval(1000L, batas);
+  // timer.setInterval(1000L, batas);
   
   for(int i = 0; i < 7; i++){
     pinMode(pinLed[i], OUTPUT);
@@ -80,5 +88,5 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   Blynk.run(); 
-  timer.run();
+  // timer.run();
 }
