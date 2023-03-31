@@ -44,14 +44,14 @@ void tampilAngka(int angka){
 
 BLYNK_WRITE(V0){
   int increment = param.asInt();
-  if(increment == 1 && counter <= 9){
+  if(increment == 1 && counter < 9){
     tampilAngka(counter++);   
   }
 }
 
 BLYNK_WRITE(V1){
   int decrement = param.asInt();
-  if(decrement == 1 && counter >= 0){
+  if(decrement == 1 && counter > 0){
       tampilAngka(counter--);   
   }
 }
