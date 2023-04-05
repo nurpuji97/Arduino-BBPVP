@@ -2,80 +2,119 @@
 #define BLYNK_PRINT Serial
 
 /* Fill in information from Blynk Device Info here */
-#define BLYNK_TEMPLATE_ID "TMPL6RkC3PbJd"
-#define BLYNK_TEMPLATE_NAME "LedTest"
-#define BLYNK_AUTH_TOKEN "h_1dXc-t2QVzJF4Uqj5gwFQ6pHjSpJ1b"
+#define BLYNK_TEMPLATE_ID "TMPL6O3o-XOlv"
+#define BLYNK_TEMPLATE_NAME "LatihanUjk1"
+#define BLYNK_AUTH_TOKEN "GNoTau-mBo_ShtGvenRgWvXhI6MhNIHe"
 
 
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
-#include <LCD_I2C.h>
 
 // Your WiFi credentials.
 // Set password to "" for open networks.
 char ssid[] = "ayen";
 char pass[] = "ayen1234";
 
+// Blynk Timer declaration
 BlynkTimer timer;
-LCD_I2C lcd(0x27, 16, 2); // Default address of most PCF8574 modules, change according
 
-const int led = D0;
-const int button = D5;
-bool nilaibutton;
-bool kondisiLed;
-bool state;
+#define Relay1 D0
+#define Relay2 D1 
+#define PbWork1 D2
+#define PbWork2 D5
+#define tglWork1 D6
+#define tglWork2 D7
+#define tglWork3 D8
+int RelayWork1;
+int RelayWork2;
+
+bool state1;
+bool state2; 
 
 BLYNK_CONNECTED(){
-  Blynk.syncAll();  
+  Blynk.syncAll();
 }
 
 BLYNK_WRITE(V0){
-  kondisiLed = param.asInt();
-  digitalWrite(led, kondisiLed);
-  Blynk.setProperty(V0, "color", "#D3435C");
+  RelayWork1 = param.asInt();
+  digitalWrite(Relay1, RelayWork1);
 }
 
-void ledbutton(){
-  nilaibutton = digitalRead(button);   
-  if(nilaibutton == 0){
-    if(state != 0){
-      kondisiLed=!kondisiLed;
-      digitalWrite(led,kondisiLed);
-      Blynk.virtualWrite(V0,kondisiLed);      
+BLYNK_WRITE(V1){
+  RelayWork2 = param.asInt();
+  digitalWrite(Relay2, RelayWork2);
+}
+
+void RelayActive(){
+  // Btn Kerja Saat Offline
+  bool btn1 = digitalRead(PbWork1);      
+    if(btn1 == 1){
+      if(state1 != 0){
+        RelayWork1 = !RelayWork1;
+        digitalWrite(Relay1, RelayWork1);
+        Blynk.virtualWrite(V0, RelayWork1);
+      }
+      state1 = 0;
+    } else{
+      state1 = 1;
     }
-    state = 0;        
-  } else {
-    state = 1; 
-  }
-  
-  if(kondisiLed == 1){
-    lcd.setCursor(0, 0);
-    lcd.print("Led: ON ");
-  } else {
-    lcd.setCursor(0, 0);
-    lcd.print("Led: OFF");   
+
+  // Btn Kerja Saat Offline
+  bool btn2 = digitalRead(PbWork2);      
+    if(btn2 == 1){
+      if(state2 != 0){
+        RelayWork2 = !RelayWork2;
+        digitalWrite(Relay2, RelayWork2);
+        Blynk.virtualWrite(V1, RelayWork2);
+      }
+      state2 = 0;
+    } else{
+      state2 = 1;
+    }
+
+  // Toggle Work
+  if(digitalRead(tglWork1) == 1){
+    Blynk.virtualWrite(V2, 1);
+    Blynk.virtualWrite(V6, "Pintu Utama Terbuka");
+    Blynk.logEvent("pintuutamaterbuka", String("Pintu Utama Terbuka ......"));
+  }  else {
+    Blynk.virtualWrite(V2, 0);
+    Blynk.virtualWrite(V6, "Pintu Utama Tertutup");    
   }
 
+  if(digitalRead(tglWork2) == 1){
+    Blynk.virtualWrite(V3, 1);
+    Blynk.virtualWrite(V5, "Pintu Belakang Terbuka");
+    Blynk.logEvent("PintuBelakangTerbuka", String("Pintu Belakang Terbuka ......"));
+  }  else {
+    Blynk.virtualWrite(V3, 0);
+    Blynk.virtualWrite(V5, "Pintu Belakang Tertutup");    
+  }
 
-  delay(400);
-  
+  if(digitalRead(tglWork3) == 1){
+    Blynk.virtualWrite(V4, 1);
+    Blynk.virtualWrite(V7, "jendela Samping Terbuka");
+    Blynk.logEvent("jendelasampingterbuka", String("Jendela Samping Terbuka ......"));
+  }  else {
+    Blynk.virtualWrite(V4, 0);
+    Blynk.virtualWrite(V7, "jendela Samping Tertutup");    
+  }
 }
- 
-void setup(){
-  // Debug console
+
+void setup() {
+// Debug console
   Serial.begin(9600);
-  Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
-  timer.setInterval(10L,ledbutton);
-  pinMode(led,OUTPUT);
-  pinMode(button,INPUT);
 
-  lcd.begin(); // If you are using more I2C devices using the Wire library use lcd.begin(false)
-                 // this stop the library(LCD_I2C) from calling Wire.begin()
-  lcd.backlight();
+  pinMode(Relay1, OUTPUT);
+  pinMode(Relay2, OUTPUT);
+  pinMode(PbWork1, INPUT);
+  pinMode(PbWork2, INPUT);
+  Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
+  timer.setInterval(10L, RelayActive);
 }
 
-void loop()
-{
+void loop() {
+  // put your main code here, to run repeatedly:
   Blynk.run();
-  timer.run();
+  timer.run(); 
 }
