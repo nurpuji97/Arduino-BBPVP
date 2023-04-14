@@ -19,8 +19,8 @@ BlynkTimer timer;
 
 DHT dht(DHTPIN, DHTTYPE);
 
-
 float temperature, humidity; // Temp and Humid floats, will be measured by the DHT
+
 
 void ActiveDHT() {
   // DHT11
@@ -33,10 +33,15 @@ void ActiveDHT() {
     return;
   }  
 
-  if(temperature > 40) {
-    digitalWrite(Buzzer, HIGH);   
+  Serial.println(temperature);
+  Blynk.virtualWrite(V0, temperature);  
+
+  if(temperature > 28) {
+    digitalWrite(Buzzer, LOW);
+    Blynk.virtualWrite(V1, 1);     
   } else {
-    digitalWrite(Buzzer, LOW);       
+    digitalWrite(Buzzer, HIGH);
+    Blynk.virtualWrite(V1, 0);         
   }
 
 }
